@@ -5,6 +5,7 @@
 aws cloudformation create-stack --stack-name MyVPCStack --template-body file://1-infra-template.yaml
 aws cloudformation update-stack --stack-name MyVPCStack --template-body file://1-infra-template.yaml
 aws cloudformation validate-template --template-body file://1-infra-template.yaml
+aws cloudformation describe-stacks --stack-name MyVPCStack --query "Stacks[0].Outputs"
 ```
 
 ## check stack status
