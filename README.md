@@ -13,6 +13,10 @@
 ### Diagram
 ![AWS VPC Diagram](images/basic-infra.png)
 
+### Traffic
+![Traffic Public](images/public-traffic.png)
+![Traffic SSH](images/ssh-traffic.png)
+
 ### Description
 1. VPC: highly available VPC infrastructure
   - A single VPC is created with DNS support and hostnames enabled.
