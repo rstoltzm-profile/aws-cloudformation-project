@@ -10,9 +10,11 @@
 2. [aws cloudformation docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
 
 ## infrastructure
-* highly available VPC infrastructure
+### Diagram
+![AWS VPC Diagram](images/basic-infra.png)
 
-1. VPC:
+### Description
+1. VPC: highly available VPC infrastructure
   - A single VPC is created with DNS support and hostnames enabled.
   - CIDR block: 10.0.0.0/16 (defined in the SubnetConfig mapping).
 2. Subnets:
