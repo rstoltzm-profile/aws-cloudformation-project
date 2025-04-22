@@ -6,5 +6,5 @@
   * AWS_ACCESS_KEY / AWS_SECRET_ACCESS_KEY
 
 ## references
-1. [https://github.com/aws-cloudformation/aws-cloudformation-templates](github templates)
-2. [https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html](aws docs)
+1. [github aws templates](https://github.com/aws-cloudformation/aws-cloudformation-templates)
+2. [aws cloudformation docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
