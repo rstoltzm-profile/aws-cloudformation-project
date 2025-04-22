@@ -1,0 +1,173 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: 'Creates a VPC with Managed NAT, similar to the VPC Wizard at https://console.aws.amazon.com/vpc/home#wizardFullpagePublicAndPrivate: (extended from VPC_with_PublicIPs_And_DNS.template sample)'
+
+Parameters:
+  VPCName:
+    Description: The name of the VPC being created.
+    Type: String
+    Default: VPC Public and Private with NAT
+
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: 10.0.0.0/16
+    Public0:
+      CIDR: 10.0.0.0/24
+    Public1:
+      CIDR: 10.0.1.0/24
+    Private0:
+      CIDR: 10.0.2.0/24
+    Private1:
+      CIDR: 10.0.3.0/24
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: "true"
+      EnableDnsHostnames: "true"
+      CidrBlock: !FindInMap
+        - SubnetConfig
+        - VPC
+        - CIDR
+      Tags:
+        - Key: Application
+          Value: !Ref AWS::StackName
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Ref VPCName
+
+  PublicSubnet0:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+      CidrBlock: !FindInMap
+        - SubnetConfig
+        - Public0
+        - CIDR
+      MapPublicIpOnLaunch: "true"
+      Tags:
+        - Key: Application
+          Value: !Ref AWS::StackName
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Join
+            - ""
+            - - !Ref VPCName
+              - -public-
+              - !Select
+                - 0
+                - !GetAZs
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+      CidrBlock: !FindInMap
+        - SubnetConfig
+        - Public1
+        - CIDR
+      MapPublicIpOnLaunch: "true"
+      Tags:
+        - Key: Application
+          Value: !Ref AWS::StackName
+        - Key: Network
+          Value: Public
+        - Key: Name
+          Value: !Join
+            - ""
+            - - !Ref VPCName
+              - -public-
+              - !Select
+                - 1
+                - !GetAZs
+
+  PrivateSubnet0:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+      CidrBlock: !FindInMap
+        - SubnetConfig
+        - Private0
+        - CIDR
+      Tags:
+        - Key: Application
+          Value: !Ref AWS::StackName
+        - Key: Network
+          Value: Private
+        - Key: Name
+          Value: !Join
+            - ""
+            - - !Ref VPCName
+              - -private-
+              - !Select
+                - 0
+                - !GetAZs
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+      CidrBlock: !FindInMap
+        - SubnetConfig
+        - Private1
+        - CIDR
+      Tags:
+        - Key: Application
+          Value: !Ref AWS::StackName
+        - Key: Network
+          Value: Private
+        - Key: Name
+          Value: !Join
+            - ""
+            - - !Ref VPCName
+              - -private-
+              - !Select
+                - 1
+                - !GetAZs
+
+Outputs:
+  VPCId:
+    Description: VPCId of VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub ${AWS::Region}-${AWS::StackName}-VPC
+      
+  PublicSubnet0:
+    Description: SubnetId of public subnet 0
+    Value: !Ref PublicSubnet0
+    Export:
+      Name: !Sub ${AWS::Region}-${AWS::StackName}-PublicSubnet0
+
+  PublicSubnet1:
+    Description: SubnetId of public subnet 1
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub ${AWS::Region}-${AWS::StackName}-PublicSubnet1
+
+  PrivateSubnet0:
+    Description: SubnetId of private subnet 0
+    Value: !Ref PrivateSubnet0
+    Export:
+      Name: !Sub ${AWS::Region}-${AWS::StackName}-PrivateSubnet0
+
+  PrivateSubnet1:
+    Description: SubnetId of private subnet 1
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub ${AWS::Region}-${AWS::StackName}-PrivateSubnet1
